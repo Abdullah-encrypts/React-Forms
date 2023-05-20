@@ -24,6 +24,11 @@ body {
 
 .form-control {
   margin-bottom: 1rem;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
 }
 
 .form-control input,
@@ -79,8 +84,17 @@ button:active {
   border-color: #33059e;
 }
 
+button:disabled,
+button:disabled:hover,
+button:disabled:active{
+  background-color: #ccc;
+  color: #3f3f3f;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
 .form-actions {
-  text-align: right;
+  text-align: center;
 }
 
 .form-actions button {
@@ -99,4 +113,5 @@ button:active {
 
 .error-text {
   color: #b40e0e;
+  text-align: center;
 }
