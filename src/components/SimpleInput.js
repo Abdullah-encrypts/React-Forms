@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
@@ -12,29 +10,37 @@ const SimpleInput = (props) => {
     reset: resetNameInput
   } = useInput(value => value.trim() !== '');
 
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
-
-  const enteredEmailIsValid = enteredEmail.includes('@');
-  const enteredEmailIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmailInput
+  } = useInput(value => value.includes('@'));
 
   let formIsValid = false;
-  if (enteredNameIsValid) {
+  if (enteredNameIsValid && enteredEmailIsValid) {
     formIsValid = true;
   }
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
-    if (!enteredNameIsValid) {
+    if (!enteredNameIsValid || !enteredEmailIsValid) {
       return;
     }
 
     console.log(enteredName);
     resetNameInput();
+    resetEmailInput();
   };
 
   const nameInputClasses = nameInputHasError
+    ? "form-control invalid"
+    : "form-control";
+
+  const emailInputClasses = emailInputHasError
     ? "form-control invalid"
     : "form-control";
 
@@ -53,6 +59,20 @@ const SimpleInput = (props) => {
       {nameInputHasError && (
         <p className="error-text">Name must not be empty!</p>
       )}
+
+      <div className={emailInputClasses}>
+      <label htmlFor="email">Your Email</label>
+        <input
+          type="email"
+          id="email"
+          value={enteredEmail}
+          onBlur={emailBlurHandler}
+          onChange={emailChangeHandler}
+        />
+      </div>
+        {emailInputHasError && (
+          <p className="error-text">Enter a valid Email!</p>
+        )}
 
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
